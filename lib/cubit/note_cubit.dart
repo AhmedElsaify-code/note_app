@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:note_app/note_hive_helper.dart';
+import 'package:note_app/core/note_hive_helper.dart';
 
 part 'note_state.dart';
 

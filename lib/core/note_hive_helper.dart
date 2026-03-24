@@ -26,7 +26,6 @@ class NoteHiveHelper {
   }
 
   static Future getAllNotes() async {
-    await Future.delayed(Duration(seconds: 3));
     if (box.isNotEmpty && Hive.box(box).get(noteKey) != null) {
       notes = await Hive.box(box).get(noteKey);
     }
