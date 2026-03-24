@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:note_app/cubit/note_cubit.dart';
 import 'package:note_app/core/note_hive_helper.dart';
 import 'package:note_app/screens/home_screen.dart';
+import 'package:note_app/screens/note_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +26,7 @@ class NoteApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NoteCubit()..getNotes(),
-      child: MaterialApp(home: HomeScreenState()),
+      child: GetMaterialApp(home: HomeScreen()),
     );
   }
 }

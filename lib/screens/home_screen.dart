@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:note_app/cubit/note_cubit.dart';
 import 'package:note_app/core/note_hive_helper.dart';
+import 'package:note_app/screens/note_screen.dart';
 
-class HomeScreenState extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
 
-  HomeScreenState({super.key});
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,31 +57,12 @@ class HomeScreenState extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           controller.clear();
-          AlertDialog alert = AlertDialog(
-            title: Text("Add Note"),
-            content: TextField(controller: controller),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  cubit.addNote(controller.text);
-                  Navigator.pop(context);
-                },
-                child: Text("Add"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("Cancel"),
-              ),
-            ],
-          );
-
-          await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            },
+          Get.to(
+            NoteScreen(
+              appbar: "Add Note",
+              controller: controller,
+              oper: operation.add,
+            ),
           );
         },
         backgroundColor: Colors.green,
@@ -89,40 +72,23 @@ class HomeScreenState extends StatelessWidget {
           ///ToDo : if condition => loading
           BlocBuilder<NoteCubit, NoteState>(
             builder: (context, state) {
-               if (state is NoteLoadingState) {
-            return Center(child: CircularProgressIndicator());
-          }
+              if (state is NoteLoadingState) {
+                return Center(child: CircularProgressIndicator());
+              }
               return ListView.builder(
                 itemCount: NoteHiveHelper.notes.length,
                 itemBuilder: (context, i) => InkWell(
                   onTap: () async {
                     controller.text = NoteHiveHelper.notes[i];
-                    AlertDialog alert = AlertDialog(
-                      title: Text("Update Note"),
-                      content: TextField(controller: controller),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            cubit.updateNote(controller.text, i);
-                            Navigator.pop(context);
-                          },
-                          child: Text("Update"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text("Cancel"),
-                        ),
-                      ],
+                    Get.to(
+                      NoteScreen(
+                        appbar: "Update Note",
+                        controller: controller,
+                        oper: operation.update,
+                        index: i,
+                      ),
                     );
-
-                    await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return alert;
-                      },
-                    );
+                    
                   },
                   child: Stack(
                     children: [
